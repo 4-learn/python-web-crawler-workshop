@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 from bs4 import BeautifulSoup
 
@@ -7,19 +8,22 @@ import time
 
 # Login with Selenium
 FACEBOOK_ID = "yillkid@gmail.com"
-FACEBOOK_PW = ""
+FACEBOOK_PW = "自行填入"
 TARGET_URL = "https://www.facebook.com/groups/pythontw"
 
 options = webdriver.ChromeOptions()
 options.add_argument("incognito")
-options.add_argument("headless")
+# options.add_argument("headless")
 
 driver = webdriver.Chrome(options = options)
 driver.get("https://www.facebook.com")
 
+print("go " + driver.title )
+
 # Get e-mail and password DOM
-email =  driver.find_element_by_id("email")
-password = driver.find_element_by_id("pass")
+# email =  driver.find_element_by_id("email")
+email =  driver.find_element(By.ID, "email")
+password = driver.find_element(By.ID, "pass")
 
 email.send_keys(FACEBOOK_ID)
 password.send_keys(FACEBOOK_PW)
@@ -39,7 +43,7 @@ for x in range(1, 4):
 
 # Get source
 soup = BeautifulSoup(driver.page_source, 'html.parser')
-titles = soup.findAll("div", {"class": "kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x c1et5uql ii04i59q"})
+titles = soup.findAll("div", {"class": "x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r x126k92a"})
 
 print("一共:" + str(len(titles)) + " 則文章...")
 
