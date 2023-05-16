@@ -24,10 +24,11 @@ print("go " + driver.title )
 # email =  driver.find_element_by_id("email")
 email =  driver.find_element(By.ID, "email")
 password = driver.find_element(By.ID, "pass")
+login = driver.find_element(By.NAME, "login")
 
 email.send_keys(FACEBOOK_ID)
 password.send_keys(FACEBOOK_PW)
-password.submit()
+login.submit()
 
 time.sleep(3)
 
