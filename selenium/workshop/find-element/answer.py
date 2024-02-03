@@ -1,12 +1,15 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 options = webdriver.ChromeOptions()
-# options.add_argument("headless")
+options.add_argument("incognito")
 
-driver = webdriver.Chrome(options = options)
-driver.get("file:///home/yillkid/workspace/ntc-python-web-crawler/selenium/workshop/find-element/input.html")
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options = options)
+driver.get("file:///home/yillkid/input.html")
 
 # Get elements
 elem_form = driver.find_element(By.ID, "loginForm")
