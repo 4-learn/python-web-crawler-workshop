@@ -1,6 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 from bs4 import BeautifulSoup
 
@@ -15,7 +18,8 @@ options = webdriver.ChromeOptions()
 options.add_argument("incognito")
 # options.add_argument("headless")
 
-driver = webdriver.Chrome(options = options)
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options = options)
 driver.get("https://www.facebook.com")
 
 print("go " + driver.title )
@@ -44,7 +48,7 @@ for x in range(1, 4):
 
 # Get source
 soup = BeautifulSoup(driver.page_source, 'html.parser')
-titles = soup.findAll("div", {"class": "x11i5rnm xat24cr x1mh8g0r x1vvkbs xdj266r x126k92a"})
+titles = soup.findAll("div", {"class": "xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs x126k92a"})
 
 print("一共:" + str(len(titles)) + " 則文章...")
 
