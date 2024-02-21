@@ -48,7 +48,7 @@ for x in range(1, 4):
 
 # Get source
 soup = BeautifulSoup(driver.page_source, 'html.parser')
-titles = soup.findAll("div", {"class": "xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs x126k92a"})
+titles = soup.findAll("div", {"class": "x1iorvi4 x1pi30zi x1l90r2v x1swvt13"})
 
 print("一共:" + str(len(titles)) + " 則文章...")
 
@@ -58,7 +58,7 @@ for title in titles:
  
     for post in posts:
         if post:
-            print(post.getText())
+            print(post.text)
 
     print("----------------------------------------")
 
