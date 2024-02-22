@@ -12,7 +12,8 @@ options = webdriver.ChromeOptions()
 # options.add_argument("headless")
 options.add_argument("incognito")
 
-driver = webdriver.Chrome(options = options, desired_capabilities=d)
+# driver = webdriver.Chrome(options = options, desired_capabilities=d)
+driver = webdriver.Chrome(options = options)
 
 ## Signup
 driver.get("https://4-learn.github.io/python-crawler-workshop-frontent/signup.html")
