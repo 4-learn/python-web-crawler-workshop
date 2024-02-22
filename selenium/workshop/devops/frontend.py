@@ -15,7 +15,7 @@ options.add_argument("incognito")
 driver = webdriver.Chrome(options = options, desired_capabilities=d)
 
 ## Signup
-driver.get("https://yillkid.github.io/ntc-python-crawler-workshop-frontent/signup.html")
+driver.get("https://4-learn.github.io/python-crawler-workshop-frontent/signup.html")
 
 # Get elements
 elem_email = driver.find_element(By.ID, "email")
@@ -34,7 +34,7 @@ elem_btn = driver.find_element(By.TAG_NAME, "button")
 elem_btn.click()
 
 ## Signin
-driver.get("https://yillkid.github.io/ntc-python-crawler-workshop-frontent/signin.html")
+driver.get("https://4-learn.github.io/python-crawler-workshop-frontent/signin.html")
 
 # Get elements
 elem_email = driver.find_element(By.ID, "email")
