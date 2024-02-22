@@ -5,9 +5,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 import json
 
-d = DesiredCapabilities.CHROME
-d['goog:loggingPrefs'] = { u'browser':'ALL' }
-
 options = webdriver.ChromeOptions()
 # options.add_argument("headless")
 options.add_argument("incognito")
