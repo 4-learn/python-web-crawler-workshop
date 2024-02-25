@@ -1,17 +1,22 @@
 from bs4 import BeautifulSoup
+html_doc = ""
+with open('input.html', 'r', encoding='utf-8') as file:
+    html_doc = file.read()
 
-# Open file
-fileInput = open("input.html", "r")
-soup = BeautifulSoup(fileInput, "html.parser")
+soup = BeautifulSoup(html_doc, 'html.parser')
 
-# 1. 提取第一個匹配元素
-print(soup.find("p"))
+# 從 body 標籤開始
+body = soup.find('body')
 
-# 2. 後面全部匹配兄弟節點
-print(soup.find(text = "This is paragraph ").findNextSiblings("b"))
+# 使用 findChild 找到第一個 div
+first_div = body.findChild('div')
 
-# 3. 第一個 p 的下一個 p
-print(soup.find("p").findNext("p"))
+# 使用 findSibling 找到第二個 div
+second_div = first_div.findChild('div')
+tw_time_div = second_div.findNextSibling('div')
+print(tw_time_div.text)
 
-# CLose file
-fileInput.close()
+# 回頭
+pre_div = tw_time_div.findPreviousSibling('div')
+time_div = pre_div.findChild('div').findChild('p').text
+print(time_div)
