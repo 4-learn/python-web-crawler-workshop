@@ -5,6 +5,7 @@ soup = BeautifulSoup(fileInput, 'html.parser')
 
 listResult = soup.find_all("a")
 for obj in listResult:
+    print("class = " + str(obj.get("class")))
     if (obj.get("class") == ["sister"] and obj.text == "Elsie"):
         print(obj.text)
 
