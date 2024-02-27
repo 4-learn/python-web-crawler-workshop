@@ -14,8 +14,7 @@ for obj in SetObjs:
     # 尋找所有 h3 tag
     list_child = obj.findChildren("h3")
     for obj in list_child:
-        for obj2 in list_child[0]:
-            print(obj2.text)
+        print(obj.text)
 
 for obj in SetObjs:
     # 尋找所有 p tag
