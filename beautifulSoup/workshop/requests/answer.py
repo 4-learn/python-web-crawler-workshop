@@ -18,7 +18,7 @@ for obj in SetObjs:
 
 for obj in SetObjs:
     # 尋找所有 p tag
-    list_child = obj.findChildren("p", recursive = False)
+    list_child = obj.findChildren("p")
     
     # 過濾時間
     for obj2 in list_child[0].children:
