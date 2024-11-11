@@ -1,58 +1,57 @@
 import pymysql
 
-# 1. 假設你爬下一個班級的成績了
-list_scores = [40, 60, 70, 90]
+class DatabaseManager:
+    def __init__(self, host="localhost", user="root", password="ntC1234#31#"):
+        self.db = pymysql.connect(host=host, user=user, password=password)
+        self.cursor = self.db.cursor()
+    
+    def database_exists(self, dbname):
+        self.cursor.execute(f"SHOW DATABASES LIKE '{dbname}'")
+        result = self.cursor.fetchone()
+        return result is not None
 
-# 2. 檢查資料庫 NTC 是否存在
-db = pymysql.connect(host="localhost",
-                 user="root",
-                 password="ntC1234#31#")
+    def create_database_and_table(self, dbname, tablename):
+        if self.database_exists(dbname):
+            self.cursor.execute(f"DROP DATABASE {dbname}")
+        self.cursor.execute(f"CREATE DATABASE {dbname}")
+        self.cursor.execute(f"USE {dbname}")
+        self.cursor.execute(f"""
+            CREATE TABLE IF NOT EXISTS {tablename} (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255),
+                value INT
+            )
+        """)
+        self.db.commit()
 
-cursor = db.cursor()
-cursor.execute("SHOW DATABASES LIKE 'ntc'")
-result = cursor.fetchone()
+    def insert_data(self, tablename, name, value):
+        sql = f"INSERT INTO {tablename} (name, value) VALUES (%s, %s)"
+        self.cursor.execute(sql, (name, value))
+        self.db.commit()
 
-if result is None:
-    print("create database ntc")
-    cursor.execute("CREATE DATABASE ntc")
-    cursor.execute("SHOW DATABASES")
-else:
-    print("drop and connect")
-    cursor.execute("DROP DATABASE ntc")
-    cursor.execute("CREATE DATABASE ntc")
-    cursor.execute("SHOW DATABASES")
+    def get_passing_scores(self, tablename, passing_score=60):
+        sql = f"SELECT * FROM {tablename} WHERE value >= %s"
+        self.cursor.execute(sql, (passing_score,))
+        results = self.cursor.fetchall()
+        return results
 
-db = pymysql.connect(host="localhost",
-    user="root",
-    password="ntC1234#31#",
-    database="ntc")
+    def close_connection(self):
+        self.cursor.close()
+        self.db.close()
 
-cursor = db.cursor()
+# 初始化資料庫管理器並執行 CRUD 操作
+manager = DatabaseManager()
+manager.create_database_and_table("NTC", "score")
 
-# 3. 替這個 NTC 新增一個表單
-## cursor.execute("DROP TABLE sites")
-cursor.execute("CREATE TABLE score (name VARCHAR(255), value INT)")
-cursor.execute("SHOW TABLES")
+# 插入成績數據
+scores = [40, 60, 70, 90]
+for i, score in enumerate(scores, start=1):
+    manager.insert_data("score", f"student_{i}", score)
 
-# 4. 將這幾筆資料存入 Table 內
-index = 0
-for input_value in list_scores:
-    index = index + 1
-    sql = "INSERT INTO score (name, value) VALUES (%s, %s)"
-    val = (str(index), str(input_value))
-    cursor.execute(sql, val)
-    db.commit()
+# 查詢並顯示及格成績
+passing_scores = manager.get_passing_scores("score", passing_score=60)
+for record in passing_scores:
+    print(record)
 
-# 5. 移除不及格的學生，他下學期不用來了
-sql = "DELETE FROM score WHERE value < 60"
-cursor.execute(sql)
-db.commit()
-
-# 6. Show 出移除被當學生後的所有的欄位
-cursor.execute("SELECT * FROM score")
-result = cursor.fetchall()
-
-for x in result:
-  print(x)
-
-db.close()
+# 關閉資料庫連接
+manager.close_connection()
