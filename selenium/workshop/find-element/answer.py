@@ -22,3 +22,6 @@ elem_password.send_keys("22")
 
 # Submit
 elem_form.submit()
+
+while True:
+    pass
