@@ -1,77 +1,36 @@
-from datetime import datetime, timedelta
-import random
-import pymysql
+import json
+import os
 
 class LawDataManager:
-    def __init__(self, db_host, db_user, db_password, db_name):
-        self.db_host = db_host
-        self.db_user = db_user
-        self.db_password = db_password
-        self.db_name = db_name
+    def __init__(self, json_file_path="laws_data.json"):
+        self.json_file_path = json_file_path
         self.laws_data = []
 
-    def connect_to_db(self):
-        return pymysql.connect(
-            host=self.db_host,
-            user=self.db_user,
-            password=self.db_password,
-            db=self.db_name
-        )
+    def save_to_json(self):
+        """將法律資料儲存到 JSON 檔案"""
+        with open(self.json_file_path, 'w', encoding='utf-8') as f:
+            json.dump(self.laws_data, f, ensure_ascii=False, indent=2)
+        print(f"\n資料已儲存到 {self.json_file_path}")
+        print(f"總共儲存 {len(self.laws_data)} 筆資料")
 
-    def drop_and_create_db(self):
-        conn = pymysql.connect(
-            host=self.db_host,
-            user=self.db_user,
-            password=self.db_password
-        )
-        cur = conn.cursor()
+    def load_from_json(self):
+        """從 JSON 檔案載入法律資料"""
+        if os.path.exists(self.json_file_path):
+            with open(self.json_file_path, 'r', encoding='utf-8') as f:
+                self.laws_data = json.load(f)
+            print(f"已從 {self.json_file_path} 載入 {len(self.laws_data)} 筆資料")
+        else:
+            print(f"檔案 {self.json_file_path} 不存在")
 
-        cur.execute(f"DROP DATABASE IF EXISTS {self.db_name}")
-        cur.execute(f"CREATE DATABASE {self.db_name}")
-        conn.commit()
-        conn.close()
+    def show_laws_data(self, limit=5):
+        """顯示法律資料（預設顯示前 5 筆）"""
+        print(f"\n顯示前 {limit} 筆資料：")
+        print("=" * 60)
 
-    def insert_laws(self):
-        conn = self.connect_to_db()
-        cur = conn.cursor()
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS laws (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                chapter VARCHAR(255),
-                article_number VARCHAR(255),
-                article_link VARCHAR(255),
-                content TEXT
-            )
-        """)
-
-        for law in self.laws_data:
-            sql = """
-                INSERT INTO laws (chapter, article_number, article_link, content)
-                VALUES (%s, %s, %s, %s)
-            """
-            cur.execute(sql, (
-                law['chapter'],
-                law['article_number'],
-                law['article_link'],
-                law['content']
-            ))
-
-        conn.commit()
-        conn.close()
-
-    def show_laws_data(self):
-        conn = self.connect_to_db()
-        cur = conn.cursor()
-
-        cur.execute("SELECT * FROM laws LIMIT 5")
-        results = cur.fetchall()
-
-        for row in results:
-            print(f"ID: {row[0]}")
-            print(f"Chapter: {row[1]}")
-            print(f"Article Number: {row[2]}")
-            print(f"Article Link: {row[3]}")
-            print(f"Content: {row[4]}")
-            print("---")
-
-        conn.close()
+        for i, law in enumerate(self.laws_data[:limit], 1):
+            print(f"\n第 {i} 筆：")
+            print(f"章節: {law.get('chapter', 'N/A')}")
+            print(f"條文編號: {law.get('article_number', 'N/A')}")
+            print(f"條文連結: {law.get('article_link', 'N/A')}")
+            print(f"內容: {law.get('content', 'N/A')[:100]}...")
+            print("-" * 60)

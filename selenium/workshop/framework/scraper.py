@@ -72,10 +72,9 @@ def scrape_laws(manager):
 
 if __name__ == "__main__":
     print("Starting web scraper...")
-    manager = LawDataManager("localhost", "root", "ntC1234#31#", "workshop_law")
-    manager.drop_and_create_db()
+    manager = LawDataManager("laws_data.json")
     scrape_laws(manager)
-    manager.insert_laws()
+    manager.save_to_json()
     manager.show_laws_data()
 
     print("\n" + "="*50)
