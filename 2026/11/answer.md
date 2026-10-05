@@ -1,5 +1,7 @@
 # 11 Workshop 參考解答
 
+A：`trace_demo_fixed.py`；B：`law_playwright.py`（輸出 laws_data.json，98 條、12 章）。
+
 ## 1. 用 Trace 找錯
 
 `trace_demo.py` 的錯誤：`page.locator("tr.row")` 是 v2 的條文選擇器，v1 動態頁面上是 `article.article`。
