@@ -8,3 +8,4 @@ levels.json
 etag_cache.json
 __pycache__/
 .pytest_cache/
+laws_data.json
