@@ -48,6 +48,10 @@ def load(path: str) -> int:
     try:
         cur = conn.cursor()
         cur.execute(DDL)
+        # 第 16 節 demo 建的表沒有 source_version：舊表就補上欄位（帳號需要 ALTER 權限）
+        cur.execute("SHOW COLUMNS FROM law_articles LIKE 'source_version'")
+        if not cur.fetchall():
+            cur.execute("ALTER TABLE law_articles ADD COLUMN source_version VARCHAR(8) NOT NULL DEFAULT 'v1'")
         cur.executemany(UPSERT, params)
         conn.commit()
         cur.execute("SELECT COUNT(*), COUNT(DISTINCT pcode, slug) FROM law_articles")
